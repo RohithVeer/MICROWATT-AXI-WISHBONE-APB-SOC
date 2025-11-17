@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+
 module soc_top (
   input  wire        CLK_IN,    // test expects this name
   input  wire        RESET_N,
@@ -43,6 +44,14 @@ module soc_top (
     .m1_rdata(m1_rdata),
     .m1_ack(m1_ack)
   );
+
+`ifdef COCOTB_SIM
+initial begin
+  $display("[VCD] creating test_logs/soc_top.vcd");
+  $dumpfile("test_logs/soc_top.vcd");
+  $dumpvars(0, soc_top);
+end
+`endif
 
 endmodule
 
