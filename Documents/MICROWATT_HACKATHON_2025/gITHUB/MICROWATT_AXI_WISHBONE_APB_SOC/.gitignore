@@ -1,0 +1,24 @@
+# python venv
+.venv/
+# openlane / pdks / builds
+OpenLane/
+openlane_flow_run.log
+open_pdks_install_run.log
+open_pdks_sky130_install.log
+openlane_placement_run.log
+# simulation/build outputs
+sim_build/
+verif/sim_build*/
+verif/sim*/
+*.vcd
+*.vvp
+# layout/gds
+gds/
+# caches / local logs
+*.log
+*.cache/
+tmp/
+# OS / user files
+*.swp
+*.swo
+.DS_Store

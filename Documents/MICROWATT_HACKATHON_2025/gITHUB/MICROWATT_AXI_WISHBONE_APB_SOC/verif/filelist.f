@@ -1,0 +1,11 @@
+rtl/axi/axi_lite_to_wishbone.sv
+rtl/wishbone/wishbone_interconnect.sv
+rtl/wishbone/wb_to_apb.sv
+rtl/apb/apb_gpio.v
+rtl/apb/apb_uart.v
+rtl/apb/apb_spi.v
+rtl/apb/apb_pwm.v
+rtl/apb/apb_timer.v
+rtl/sram/sram_wrapper.v
+rtl/top/soc_top.v
+verif/sim/beh_sram_1kbyte_1rw1r_32x256_8.v
