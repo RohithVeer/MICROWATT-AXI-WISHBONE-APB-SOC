@@ -1,0 +1,24 @@
+# Simulation outputs / logs
+/test_logs/
+# keep local verif logs out too
+/verif/test_logs/
+
+# Sim build directories
+/sim_build/
+/verif/sim_build/
+
+# Waveform / simulation files and viewers
+*.vcd
+*.vvp
+*.gtkw
+
+# Logs and general build outputs
+*.log
+
+# Python cache
+__pycache__/
+
+# Editor/OS junk (optional)
+*.swp
+*.DS_Store
+

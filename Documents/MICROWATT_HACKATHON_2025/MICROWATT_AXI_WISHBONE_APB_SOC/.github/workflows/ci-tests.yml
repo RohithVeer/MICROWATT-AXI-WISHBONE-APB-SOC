@@ -1,0 +1,78 @@
+name: Sim & Wave CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  run-sims:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install packages
+      run: |
+        python -m pip install --upgrade pip || true
+        if [ -f verif/requirements.txt ]; then pip install -r verif/requirements.txt || true; fi
+        sudo apt-get update
+        sudo apt-get install -y iverilog gtkwave || true
+
+    - name: Prepare logs dir
+      run: mkdir -p test_logs verif/test_logs
+
+    - name: Run 4 smoke tests (fast)
+      run: |
+        for m in test_sram test_wishbone test_wb_to_apb test_apb; do
+          make -C verif MODULE=$m SIM=icarus V=1 2>&1 | tee verif/test_logs/run_${m}.log || true
+          mv -f verif/test_logs/*.vcd test_logs/ 2>/dev/null || true
+        done
+
+    - name: Run full tests
+      run: |
+        make -C verif test_all || true
+        mv -f verif/test_logs/*.vcd test_logs/ 2>/dev/null || true
+
+    - name: Merge waves (script) and fallback gtkw gen
+      run: |
+        chmod +x scripts/merge_waves.sh || true
+        mkdir -p verif/test_logs
+        cp -f test_logs/*.vcd verif/test_logs/ || true
+        ./scripts/merge_waves.sh || true
+        python - <<'PY'
+import glob, os
+root = os.getcwd()
+out = 'test_logs/all_tests_combined_gtkw_generated.gtkw'
+with open(out, 'w') as f:
+    f.write("gtkwave savefile 1.0\n")
+    f.write("dumpfile {\n")
+    for p in sorted(glob.glob('test_logs/*.vcd')):
+        f.write(f"  {root}/{p}\n")
+    f.write("}\nshowsignals 0\nmarklist { }\n")
+print("wrote", out)
+PY
+
+    - name: Upload wave artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: sim-waves
+        path: |
+          test_logs/*.vcd
+          test_logs/merged_all_tests.vcd
+          test_logs/all_tests_combined_gtkw_generated.gtkw
+          test_logs/all_tests_combined.gtkw
+
+    - name: Upload logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: sim-logs
+        path: verif/test_logs/*.log
+YAML
+
