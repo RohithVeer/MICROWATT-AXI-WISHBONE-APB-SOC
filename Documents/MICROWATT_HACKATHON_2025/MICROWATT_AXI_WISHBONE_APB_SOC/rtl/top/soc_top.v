@@ -47,8 +47,8 @@ module soc_top (
 
 `ifdef COCOTB_SIM
 initial begin
-  $display("[VCD] creating test_logs/soc_top.vcd");
-  $dumpfile("test_logs/soc_top.vcd");
+  $display("VCD: %0s", ("VCD_FILE"));
+  $dumpfile(("VCD_FILE"));
   $dumpvars(0, soc_top);
 end
 `endif
