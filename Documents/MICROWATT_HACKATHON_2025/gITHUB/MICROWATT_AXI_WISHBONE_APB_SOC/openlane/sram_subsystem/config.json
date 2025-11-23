@@ -1,0 +1,14 @@
+{
+  "DESIGN_NAME": "soc_core",
+  "VERILOG_FILES": [
+    "verilog/rtl/axi/axi_lite_to_wishbone.sv",
+    "verilog/rtl/wishbone/wishbone_interconnect.sv",
+    "verilog/rtl/wishbone/wb_to_apb.sv",
+    "verilog/rtl/sram/sram_wrapper.v",
+    "verilog/rtl/top/soc_core.v",
+    "verilog/rtl/top/sram_adapter.v"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 20
+}
+
